@@ -1,89 +1,128 @@
-import { ChakraProvider, Box, Flex, Heading, Text, Image, Button, Stack, AbsoluteCenter, Card, CardHeader, CardBody, CardFooter, Divider, ButtonGroup, Link } from '@chakra-ui/react';
-import {
-  Menu,
-  MenuButton,
-  MenuList,
-  MenuItem,
-  MenuItemOption,
-  MenuGroup,
-  MenuOptionGroup,
-  MenuDivider,
-} from '@chakra-ui/react'
-import {Spacer} from '@chakra-ui/react'
-import { IconButton } from '@chakra-ui/react'
+import { ChakraProvider, Box, Flex, Heading, Text, Button } from '@chakra-ui/react';
 import React, { useState } from 'react';
-import { HamburgerIcon } from '../../node_modules/@chakra-ui/icons/dist/Hamburger';
-import { ChevronDownIcon } from '../../node_modules/@chakra-ui/icons/dist/ChevronDown';
-import logo from '../assets/logo.png'; // Replace with the path to your logo image
-import img from '../assets/image.png';
-
-import axios from 'axios';
-
 
 function App() {
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [selectedCard, setSelectedCard] = useState<number | null>(null);
 
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files && event.target.files[0];
-    setSelectedFile(file);
+  const handleCardClick = (index: number) => {
+    setSelectedCard(index);
   };
 
   return (
     <ChakraProvider>
-        <Box bg = "#827397" height = "100vh" position="relative">
+      <Box bg="#827397" minHeight="100vh" padding="4">
         <Flex
-          as="nav"
+          direction="column"
           align="center"
-          padding="1rem"
-          bg="#E9D5DA"
+          justify="center"
+          height="100%"
           color="white"
-          height='50'
-          gap='20px'
+          textAlign="center"
         >
-          <Flex align="center"> 
-            <Image src={logo} alt="Logo" boxSize="150px" mr={2} />
-          </Flex>
-          <Menu>
-              <MenuButton
-                as={Button}
-                variant='outline'
-                rightIcon={<ChevronDownIcon />}
-              >Action 
-              </MenuButton>
-              <MenuList>
-                <MenuItem color='black'>Individuals</MenuItem>
-                <MenuItem color='black'>Businesses</MenuItem>
-              </MenuList>
-            </Menu>
-          {/* <Link href="/how-to-use" fontSize="lg">
-            How to Use?
-          </Link> */}
-          <Link href="/tools" fontSize="lg">
-            Tools
-          </Link>
-          <Link href="/pricing" fontSize="lg">
+          <Heading as="h1" size="2xl" marginBottom="4">
             Pricing
-          </Link>
-          <Spacer />
-            <Menu>
-              <MenuButton
-                as={Button}
-              
-                aria-label='Options'
-                variant='outline'
-              />
-              <MenuList>
-                <MenuItem color='black'>New Tab</MenuItem>
-                <MenuItem color='black'>New Window</MenuItem>
-                <MenuItem color='black'>Open Closed Tab</MenuItem>
-                <MenuItem color='black'>Open File...</MenuItem>
-              </MenuList>
-            </Menu>
-          
-        </Flex> 
-        
+          </Heading>
+          <Text fontSize="xl" marginBottom="8">
+            Choose a plan that works for you
+          </Text>
+
+          <Flex align="center" justify="center" marginBottom="8" overflowX="auto">
+            <Box
+              bg="white"
+              borderRadius="md"
+              padding="8"
+              boxShadow={selectedCard === 0 ? 'xl' : 'md'}
+              width="320px"
+              marginRight="4"
+              onClick={() => handleCardClick(0)}
+              cursor="pointer"
+            >
+              <Text fontSize="xl" marginBottom="4">
+                Subscription Plan
+              </Text>
+              <Text fontSize="lg" marginBottom="2">
+                ₹ 13.25 / image
+              </Text>
+              <Text fontSize="lg" marginBottom="2">
+                40 credits / month
+              </Text>
+              <Text fontSize="lg" marginBottom="4">
+                For non-commercial use only
+              </Text>
+              <Text fontSize="xl" fontWeight="bold" marginBottom="4">
+                ₹ 599
+              </Text>
+              <Button colorScheme="purple" width="100%">
+                Choose Plan
+              </Button>
+            </Box>
+
+            <Box
+              bg="white"
+              borderRadius="md"
+              padding="8"
+              boxShadow={selectedCard === 1 ? 'xl' : 'md'}
+              width="320px"
+              marginRight="4"
+              onClick={() => handleCardClick(1)}
+              cursor="pointer"
+            >
+              <Text fontSize="xl" marginBottom="4">
+                Subscription Plan
+              </Text>
+              <Text fontSize="lg" marginBottom="2">
+                ₹ 14.98 / image
+              </Text>
+              <Text fontSize="lg" marginBottom="2">
+                200 credits / month
+              </Text>
+              <Text fontSize="xl" fontWeight="bold" marginBottom="4">
+                ₹ 2,650
+              </Text>
+              <Button colorScheme="purple" width="100%">
+                Choose Plan
+              </Button>
+            </Box>
+
+            <Box
+              bg="white"
+              borderRadius="md"
+              padding="8"
+              boxShadow={selectedCard === 2 ? 'xl' : 'md'}
+              width="320px"
+              onClick={() => handleCardClick(2)}
+              cursor="pointer"
+            >
+              <Text fontSize="xl" marginBottom="4">
+                Subscription Plan
+              </Text>
+              <Text fontSize="lg" marginBottom="2">
+                ₹ 13.25 / image
+              </Text>
+              <Text fontSize="lg" marginBottom="2">
+                500 credits / month
+              </Text>
+              <Text fontSize="xl" fontWeight="bold" marginBottom="4">
+                ₹ 5,950
+              </Text>
+              <Button colorScheme="purple" width="100%">
+                Choose Plan
+              </Button>
+            </Box>
+          </Flex>
+
+          <Text fontSize="lg" color="gray.200">
+            Need a custom plan? Contact us for more details.
+          </Text>
+        </Flex>
+        <Box marginTop="8" marginBottom="4" textAlign="center">
+          <Text fontSize="lg" color="gray.200">
+            Footer content goes here
+          </Text>
         </Box>
-      
+      </Box>
     </ChakraProvider>
   );
 }
+
+export default App;
