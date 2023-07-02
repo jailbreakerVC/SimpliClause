@@ -11,7 +11,20 @@ import {
 } from '@chakra-ui/react'
 import {Spacer} from '@chakra-ui/react'
 import { IconButton } from '@chakra-ui/react'
+import {
+  Table,
+  Thead,
+  Tbody,
+  Tfoot,
+  Tr,
+  Th,
+  Td,
+  TableCaption,
+  TableContainer,
+} from '@chakra-ui/react'
+import { useEffect} from "react";
 import React, { useState } from 'react';
+// import { BrowserRouter as Router, Switch, Route, Link as RouterLink } from 'react-router-dom';
 import { HamburgerIcon } from '../../node_modules/@chakra-ui/icons/dist Hamburger';
 import { ChevronDownIcon } from '../../node_modules/@chakra-ui/icons/dist/ChevronDown';
 
@@ -19,15 +32,107 @@ import logo from '../assets/logo.png'; // Replace with the path to your logo ima
 import img from '../assets/image.png';
 
 import axios from 'axios';
+import pricing from './Pricing'; // Import the HowToUse component
+import Invoice from './components/Results';
 
+
+const invoiceData = [
+  {
+    "invoice_number": "INV-123456",
+    "invoice_date": "2023-06-30",
+    "customer_name": "John Doe",
+    "total_amount": 150.25,
+    "currency": "INR",
+    "items": [
+      {
+        "item_name": "Industrial Laser",
+        "quantity": 2,
+        "unit_price": 50.50,
+        "subtotal": 101.00
+      },
+      {
+        "item_name": "3D Printer",
+        "quantity": 1,
+        "unit_price": 48.75,
+        "subtotal": 48.75
+      }
+    ],
+    "terms_and_conditions": [
+      "You must include GST Invoice",
+      "Provide custom support and replacement if any damage to product in normal use for 3 months"
+    ]
+  }
+];
+
+type Item = {
+  item_name: string
+  quantity: number,
+  unit_price: number,
+  subtotal: number
+}
+
+let i = []; 
+
+// type Invoice = {
+//   invoice_number: string,
+//   invoice_date: string,
+//   customer_name: string,
+//   total_amount: number,
+//   currency: string,
+//   items: (Item)[], 
+//   terms_and_conditions: (string)[]
+// }
+
+// const [invoices, setInvoices] = useState<Invoice[]>("");
+
+// type Invoice = {
+//   id: string;
+//   date: string;
+//   amount: number;
+//   status: string;
+// };
+
+// function Home() {
+//   return (
+//     <Box textAlign="center" paddingTop="40px">
+//       <Heading as="h1" size="2xl">
+//         Welcome to Chakra UI
+//       </Heading>
+//     </Box>
+//   );
+// }
+
+async function fetchData(): Promise<any> {
+  try {
+    const response: AxiosResponse = await axios.get('https://express-server-production-9d26.up.railway.app/invoice');
+    const data = response.data;
+    return data;
+  } catch (error) {
+    console.error('Error fetching data:', error);
+    throw error;
+  }
+}
 
 function App() {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  // const [show,setShow]=useState(false)
+  let show = true; 
 
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files && event.target.files[0];
-    setSelectedFile(file);
-  };
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       const response = await axios.get(
+  //       "https://express-server-production-9d26.up.railway.app/invoice"
+  //       );
+  //       setInvoices(response.data);
+  //       console.log(response.data)
+  //     } catch (error) {
+  //         console.log(error);
+  //       }
+  //   };
+
+  //   fetchData();
+  // }, []);
 
   return (
     <ChakraProvider>
@@ -63,12 +168,17 @@ function App() {
           {/* <Link href="/how-to-use" fontSize="lg">
             How to Use?
           </Link> */}
-          <Link href="/tools" fontSize="lg" fontWeight='bold'>
+          <Link href="./Tools" fontSize="lg" fontWeight='bold'>
             Tools
           </Link>
-          <Link href="/pricing" fontSize="lg" fontWeight='bold'>
-            Pricing
-          </Link>
+          <Link fontSize = "lg" fontWeight='bold'> Pricing </Link>
+          {/* <Link as={RouterLink} to="/Pricing" fontSize="lg" fontWeight='bold'> */}
+            {/* Pricing */}
+          {/* </Link> */}
+          {/* <Switch> */}
+            {/* <Route path="./" exact component={Home} /> */}
+            {/* <Route path="./Pricing" component={pricing} /> */}
+          {/* </Switch> */}
           <Spacer />
             <Menu>
               <MenuButton
@@ -86,19 +196,7 @@ function App() {
             </Menu>
           
         </Flex> 
-        
-{/*         
-        <Flex
-          as="box"
-          align="center"
-          justify="center"
-          padding='4'
-          bg = '#BCEAD5'
-          my ='50%'
-          height='50%'
-        > 
-          <Flex align="center" height='50%'>
-          </Flex> */}
+      
         <Flex
         justify='center'
         >
@@ -161,208 +259,44 @@ function App() {
               variant="outline"
               cursor="pointer"
               align='center'
+              onSubmit = {() => {
+                show = true; 
+              }}
             >
               Upload File
             </Button>
             <input
               id="file-upload"
               type="file"
-              onChange={handleFileChange}
               style={{ display: 'none' }}
             />
             </label>
-            {/* {selectedFile && <p>Selected file: {selectedFile.name}</p>} */}
+            {selectedFile && <p>Selected file: {selectedFile.name}</p>}
+            <Button
+              as="span"
+              marginTop="1"
+              colorScheme="Purple"
+              variant="outline"
+              cursor="pointer"
+              align='center'
+              onSubmit = {() => {
+                // onClick={setShow(true)} 
+              }}
+            >
+              Show Results
+            </Button>
           </CardFooter>
           </Card>
         </Flex>
 
-          {/* <Card maxW='sm'>
-          <CardBody>
-            <Image
-              src='https://images.unsplash.com/photo-1555041469-a586c61ea9bc?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1770&q=80'
-              alt='Green double couch with wooden legs'
-              borderRadius='lg'
-            />
-            <Stack mt='6' spacing='3' textAlign>
-            <Heading size='md' textAlign='center'>Upload Your File Here!</Heading>
-            <Text>
-              This sofa is perfect for modern tropical spaces, baroque inspired
-              spaces, earthy toned spaces and for people who love a chic design with a
-              sprinkle of vintage design.
-            </Text>
-            <Text color='blue.600' fontSize='2xl'>
-              $450
-            </Text>
-            </Stack>
-          </CardBody>
-          <Divider />
-          <CardFooter>
-          <label htmlFor="file-upload">
-            <Button
-              as="span"
-              marginTop="1"
-              colorScheme="teal"
-              variant="outline"
-              cursor="pointer"
-            >
-              Upload File
-            </Button>
-            <input
-              id="file-upload"
-              type="file"
-              onChange={handleFileChange}
-              style={{ display: 'none' }}
-            />
-            </label>
-            {/* {selectedFile && <p>Selected file: {selectedFile.name}</p>}
-          </CardFooter>
-        </Card> 
+        <Invoice invoiceData={invoiceData[0]} show = {show}/>
 
-        
-        </Flex> */}
-
-        
-        {/* <AbsoluteCenter bg='#BCEAD5' p='4' color='white' axis='both' mt='10' height='80%' width='80%' textAlign='center'>
-          <Heading as='h1' fontSize='2xl' paddingTop="40px">
-            Upload Files
-          </Heading>
-          <Text fontSize='xl' marginTop='4'>
-            Upload file and we'll list simplified T&C
-          </Text>
-          <label htmlFor="file-upload">
-            <Button
-              as="span"
-              marginTop="4"
-              colorScheme="teal"
-              variant="outline"
-              cursor="pointer"
-            >
-              Upload File
-          </Button>
-            <input
-              id="file-upload"
-              type="file"
-              onChange={handleFileChange}
-              style={{ display: 'none' }}
-            />
-          </label>
-          {selectedFile && <p>Selected file: {selectedFile.name}</p>}
-        </AbsoluteCenter> */}
-        {/* <Center>
-          <Box>
-            Hello
-          </Box> */}
-          {/* <Box textAlign="center" paddingTop="40px">
-          <Heading as="h1" size="2xl">
-            Welcome to Chakra UI
-          </Heading>
-          <Text fontSize="xl" marginTop="4">
-            Build beautiful interfaces with ease
-          </Text>
-          <label htmlFor="file-upload">
-            <Button
-              as="span"
-              marginTop="4"
-              colorScheme="teal"
-              variant="outline"
-              cursor="pointer"
-            >
-              Upload File
-            </Button>
-            <input
-              id="file-upload"
-              type="file"
-              onChange={handleFileChange}
-              style={{ display: 'none' }}
-            />
-          </label>
-          {selectedFile && <p>Selected file: {selectedFile.name}</p>}
-        </Box> */}
-        {/* </Center> */}
         </Box>
-      
     </ChakraProvider>
   );
 }
 
 export default App;
 
-type item = {
-  item_name: string
-  quantity: number,
-  unit_price: number,
-  subtotal: number
-}
 
-type invoice = {
-  invoice_number: string,
-  invoice_date: string,
-  customer_name: string,
-  total_amount: number,
-  currency: string,
-  items: (item)[], 
-  terms_and_conditions: (string)[]
-}
 
-const invoiceData = [
-  {
-    "invoice_number": "INV-123456",
-    "invoice_date": "2023-06-30",
-    "customer_name": "John Doe",
-    "total_amount": 150.25,
-    "currency": "INR",
-    "items": [
-      {
-        "item_name": "Industrial Laser",
-        "quantity": 2,
-        "unit_price": 50.50,
-        "subtotal": 101.00
-      },
-      {
-        "item_name": "3D Printer",
-        "quantity": 1,
-        "unit_price": 48.75,
-        "subtotal": 48.75
-      }
-    ],
-    "terms_and_conditions": [
-      "You must include GST Invoice",
-      "Provide custom support and replacement if any damage to product in normal use for 3 months"
-    ]
-  }
-];
-
-type GetUsersResponse = {
-  data: User[];
-};
-
-async function getInfo() {
-  try {
-    // 👇️ const data: GetUsersResponse
-    const { data, status } = await axios.get<GetUsersResponse>(
-      'https://reqres.in/api/users',
-      {
-        headers: {
-          Accept: 'application/json',
-        },
-      },
-    );
-
-    console.log(JSON.stringify(data, null, 4));
-
-    // 👇️ "response status is: 200"
-    console.log('response status is: ', status);
-
-    return data;
-  } catch (error) {
-    if (axios.isAxiosError(error)) {
-      console.log('error message: ', error.message);
-      return error.message;
-    } else {
-      console.log('unexpected error: ', error);
-      return 'An unexpected error occurred';
-    }
-  }
-}
-
-getInfo();
