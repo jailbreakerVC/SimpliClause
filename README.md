@@ -6,6 +6,11 @@
 
 Friends and businesses often struggle with the complexities of managing and understanding their bills and invoices. The process of organizing, categorizing, and comprehending bills can be time-consuming, error-prone, and confusing. This often leads to inefficiencies, misunderstandings, and potential disputes.
 
+## User Interface 
+
+![Screen Shot 2023-08-01 at 10 14 07 AM](https://github.com/jailbreakerVC/SimpliClause/assets/97379193/70db211b-6ec2-4ff1-a4e5-d1e35c93f05b)
+![image](https://github.com/jailbreakerVC/SimpliClause/assets/97379193/15e68ab1-20a1-4a39-bc07-b2e19a5638cb)
+
 ## Solution:
 
 SimpliClause is an innovative web-based application that streamlines the bill management process, providing users with a structured and clarified representation of their bills. It simplifies the task of organizing and analyzing bills by automating key processes. Users can effortlessly upload their documents, and SimpliClause will extract the relevant information, categorize expenses, and generate clear, user-friendly summaries.
